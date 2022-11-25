@@ -37,7 +37,7 @@
       <div class="item__pics pics">
         <div class="pics__wrapper">
           <router-link :to="{name: 'product', params: {id: product.id}}">
-            <img width="570" height="570" :src="product.image" :alt="product.title">
+            <img :src="product.image" :alt="product.title">
           </router-link>
         </div>
         <ul class="pics__list">

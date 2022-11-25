@@ -130,6 +130,13 @@
         this.formErrorMessage = '';
 
         axios
+          .get(API_BASE_URL + '/api/deliveries', {
+              params: {
+                id: this.id,
+                title: this.title,
+                price: this.price,
+              }
+            })
           .post(API_BASE_URL + '/api/orders', {
             ...this.formData
           }, {

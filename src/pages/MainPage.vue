@@ -48,8 +48,8 @@
     components: { ProductList, BasePagination, ProductFilter },
     data() {
       return {
-        filterPriceFrom: 0,
-        filterPriceTo: 0,
+        filterPriceFrom: 1,
+        filterPriceTo: 1,
         filterCategoryId: 0,
         filterColorCheck: "",
 
@@ -87,6 +87,7 @@
             params: {
               page: this.page,
               limit: this.productsPerPage,
+              props: this.props,
               categoryId: this.filterCategoryId,
               minPrice: this.filterPriceFrom,
               maxPrice: this.filterPriceTo,
