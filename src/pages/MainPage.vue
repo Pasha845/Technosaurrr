@@ -50,14 +50,11 @@
       return {
         filterPriceFrom: 1,
         filterPriceTo: 1,
-        filterCategoryId: 0,
+        filterCategoryId: 1,
         filterColorCheck: "",
-
         page: 1,
         productsPerPage: 9,
-
         productsData: null,
-
         productsLoading: false,
         productsLoadingFailed: false
       }
@@ -89,9 +86,8 @@
               limit: this.productsPerPage,
               props: this.props,
               categoryId: this.filterCategoryId,
-              minPrice: this.filterPriceFrom,
-              maxPrice: this.filterPriceTo,
-              colorId: this.filterColorCheck
+              minPrice: this.filterPriceFrom ? this.filterPriceFrom : null,
+              maxPrice: this.filterPriceTo ? this.filterPriceTo : null
             }
           })
           .then(response => this.productsData = response.data)

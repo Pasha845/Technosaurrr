@@ -156,7 +156,6 @@
         currentPriceTo: 0,
         currentCategoryId: 0,
         currentColorCheck: '',
-
         categoriesData: null
       }
     },
