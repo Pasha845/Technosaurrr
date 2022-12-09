@@ -48,12 +48,12 @@
     components: { ProductList, BasePagination, ProductFilter },
     data() {
       return {
-        filterPriceFrom: 1,
-        filterPriceTo: 1,
-        filterCategoryId: 1,
+        filterPriceFrom: null,
+        filterPriceTo: null,
+        filterCategoryId: 0,
         filterColorCheck: "",
         page: 1,
-        productsPerPage: 9,
+        productsPerPage: 12,
         productsData: null,
         productsLoading: false,
         productsLoadingFailed: false
@@ -65,7 +65,7 @@
           ? this.productsData.items.map(product => {
             return {
               ...product,
-              image: product.image.file.url
+              image: product.preview.file.url
             }
           })
           : [];
@@ -75,7 +75,7 @@
       }
     },
     methods: {
-      loadProducts(){
+      loadProducts() {
         this.productsLoading = true;
         this.productsLoadingFailed = false;
         clearTimeout(this.loadProductsTimer);
@@ -84,10 +84,10 @@
             params: {
               page: this.page,
               limit: this.productsPerPage,
-              props: this.props,
               categoryId: this.filterCategoryId,
-              minPrice: this.filterPriceFrom ? this.filterPriceFrom : null,
-              maxPrice: this.filterPriceTo ? this.filterPriceTo : null
+              minPrice: this.filterPriceFrom,
+              maxPrice: this.filterPriceTo,
+              colorId: this.filterColorCheck
             }
           })
           .then(response => this.productsData = response.data)

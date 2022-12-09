@@ -37,7 +37,7 @@
       <div class="item__pics pics">
         <div class="pics__wrapper">
           <router-link :to="{name: 'product', params: {id: product.id}}">
-            <img :src="product.image" :alt="product.title">
+            <img :src="product.preview.file.url" :alt="product.title">
           </router-link>
         </div>
         <ul class="pics__list">
@@ -78,25 +78,12 @@
             <fieldset class="form__block">
               <legend class="form__legend">Цвет:</legend>
               <ul class="colors">
-                <li class="colors__item">
+                <li class="colors__item" v-for="(color, index) in product.colors" v-bind:key="index">
                   <label class="colors__label">
-                    <input class="colors__radio sr-only" type="radio" name="color-item" value="blue" checked="">
-                    <span class="colors__value" style="background-color: #73B6EA;">
+                    <input class="colors__radio sr-only" type="radio" name="color-item">
+                    <span class="colors__value" :style="{ background: color.color.code }">
                     </span>
                   </label>
-                </li>
-                <li class="colors__item">
-                  <label class="colors__label">
-                    <input class="colors__radio sr-only" type="radio" name="color-item" value="yellow">
-                    <span class="colors__value" style="background-color: #FFBE15;">
-                    </span>
-                  </label>
-                </li>
-                <li class="colors__item">
-                  <label class="colors__label">
-                    <input class="colors__radio sr-only" type="radio" name="color-item" value="gray">
-                    <span class="colors__value" style="background-color: #939393;">
-                  </span></label>
                 </li>
               </ul>
             </fieldset>
@@ -199,6 +186,7 @@
   export default {
     data() {
       return {
+        colorId: null,
         productAmount: 1,
         productData: null,
         productLoading: false,
@@ -227,7 +215,7 @@
       addToCart() {
         this.productAdded = false;
         this.productAddSending = true;
-        this.addProductToCart({productId: this.product.id, amount: this.productAmount})
+        this.addProductToCart({productId: this.product.id, amount: this.productAmount, colorId: this.colorId})
           .then(() => {
             this.productAdded = true;
             this.productAddSending = false;
