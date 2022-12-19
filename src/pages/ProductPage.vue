@@ -42,23 +42,23 @@
         </div>
         <ul class="pics__list">
           <li class="pics__item">
-            <a href="" class="pics__link pics__link--current">
-              <img width="98" height="98" src="img/phone-square-1.jpg" srcset="img/phone-square-1@2x.jpg 2x" alt="Название товара">
+            <router-link class="pics__link" :to="{name: 'product', params: {id: product.id}}">
+              <img width="98" height="98" :src="product.preview.file.url" :alt="product.title">
+            </router-link>
+          </li>
+          <li class="pics__item">
+            <a href="" class="pics__link">
+              <img width="98" height="98" :src="product.image" srcset="img/phone-square-2@2x.jpg 2x" alt="Название товара">
             </a>
           </li>
           <li class="pics__item">
             <a href="" class="pics__link">
-              <img width="98" height="98" src="img/phone-square-2.jpg" srcset="img/phone-square-2@2x.jpg 2x" alt="Название товара">
-            </a>
-          </li>
-          <li class="pics__item">
-            <a href="" class="pics__link">
-              <img width="98" height="98" src="img/phone-square-3.jpg" srcset="img/phone-square-3@2x.jpg 2x" alt="Название товара">
+              <img width="98" height="98" :src="product.image" srcset="img/phone-square-3@2x.jpg 2x" alt="Название товара">
             </a>
           </li>
           <li class="pics__item">
             <a class="pics__link" href="#">
-              <img width="98" height="98" src="img/phone-square-4.jpg" srcset="img/phone-square-4@2x.jpg 2x" alt="Название товара">
+              <img width="98" height="98" :src="product.image" srcset="img/phone-square-4@2x.jpg 2x" alt="Название товара">
             </a>
           </li>
         </ul>
@@ -186,7 +186,6 @@
   export default {
     data() {
       return {
-        colorId: null,
         productAmount: 1,
         productData: null,
         productLoading: false,
@@ -215,7 +214,7 @@
       addToCart() {
         this.productAdded = false;
         this.productAddSending = true;
-        this.addProductToCart({productId: this.product.id, amount: this.productAmount, colorId: this.colorId})
+        this.addProductToCart({productId: this.product.id, amount: this.productAmount, color: 1})
           .then(() => {
             this.productAdded = true;
             this.productAddSending = false;

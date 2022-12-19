@@ -50,7 +50,7 @@
                 <label class="options__label">
                   <input class="options__radio sr-only" type="radio" name="delivery" value="500">
                   <span class="options__value">
-                    Курьером <b>500 ₽</b>
+                    Курьером <b> {{this.price}} ₽</b>
                   </span>
                 </label>
               </li>
