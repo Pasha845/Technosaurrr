@@ -47,19 +47,19 @@
             </router-link>
           </li>
           <li class="pics__item">
-            <a href="" class="pics__link">
-              <img width="98" height="98" :src="product.image" srcset="img/phone-square-2@2x.jpg 2x" alt="Название товара">
-            </a>
+            <router-link class="pics__link" :to="{name: 'product', params: {id: product.id}}">
+              <img width="98" height="98" :src="product.preview.file.url" :alt="product.title">
+            </router-link>
           </li>
           <li class="pics__item">
-            <a href="" class="pics__link">
-              <img width="98" height="98" :src="product.image" srcset="img/phone-square-3@2x.jpg 2x" alt="Название товара">
-            </a>
+            <router-link class="pics__link" :to="{name: 'product', params: {id: product.id}}">
+              <img width="98" height="98" :src="product.preview.file.url" :alt="product.title">
+            </router-link>
           </li>
           <li class="pics__item">
-            <a class="pics__link" href="#">
-              <img width="98" height="98" :src="product.image" srcset="img/phone-square-4@2x.jpg 2x" alt="Название товара">
-            </a>
+            <router-link class="pics__link" :to="{name: 'product', params: {id: product.id}}">
+              <img width="98" height="98" :src="product.preview.file.url" :alt="product.title">
+            </router-link>
           </li>
         </ul>
       </div>
@@ -72,17 +72,28 @@
         <div class="item__form">
           <form class="form" action="#" method="POST" @submit.prevent="addToCart">
             <b class="item__price">
-              {{ product.price | numberFormat }} ₽
+              {{ selectValue.price * this.productAmount | numberFormat }} ₽
             </b>
-
             <fieldset class="form__block">
               <legend class="form__legend">Цвет:</legend>
               <ul class="colors">
-                <li class="colors__item" v-for="(color, index) in product.colors" v-bind:key="index">
+                <li class="colors__item" v-for="color in product.colors" v-bind:key="color.id">
                   <label class="colors__label">
-                    <input class="colors__radio sr-only" type="radio" name="color-item">
+                    <input class="colors__radio sr-only" type="radio" v-model="selectColor" :value="color.color.id">
                     <span class="colors__value" :style="{ background: color.color.code }">
                     </span>
+                  </label>
+                </li>
+              </ul>
+            </fieldset>
+
+            <fieldset class="form__block">
+              <legend class="form__legend">Объем, в ГБ:</legend>
+              <ul class="sizes sizes--primery">
+                <li class="sizes__item" v-for="value in product.offers" v-bind:key="value.id">
+                  <label class="sizes__label">
+                    <input class="sizes__radio sr-only" type="radio" v-model="selectValue" :value="value">
+                    <span class="sizes__value" v-for="v in value.propValues" v-bind:key="v.id">{{ v.value }}</span>
                   </label>
                 </li>
               </ul>
@@ -184,8 +195,16 @@
   import { mapActions } from 'vuex';
 
   export default {
+    prods() {
+      for (let index = 0; index < 2; ++index) {
+        let prop = this.productsData.offers.index
+        return prop
+      }
+    },
     data() {
       return {
+        selectColor: '',
+        selectValue: '',
         productAmount: 1,
         productData: null,
         productLoading: false,
@@ -214,7 +233,7 @@
       addToCart() {
         this.productAdded = false;
         this.productAddSending = true;
-        this.addProductToCart({productId: this.product.id, amount: this.productAmount, color: 1})
+        this.addProductToCart({productId: this.selectValue.id, amount: this.productAmount, color: this.selectColor})
           .then(() => {
             this.productAdded = true;
             this.productAddSending = false;

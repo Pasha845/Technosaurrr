@@ -39,9 +39,9 @@ export default new Vuex.Store({
     syncCartProducts(state) {
       state.cartProducts = state.cartProductsData.map(item => {
         return {
-          productOfferId: item.product.id,
+          productOfferId: 7,
           amount: item.quantity,
-          colorId: 1
+          colorId: 4
         }
       });
     }
@@ -49,13 +49,11 @@ export default new Vuex.Store({
   getters: {
     cartDetailProducts(state) {
       return state.cartProducts.map(item => {
-        const product = state.cartProductsData.find(p => p.product.id === item.productId).product;
-
+        const product = state.cartProductsData.find(p => p.product === item.productId).product;
         return {
           ...item,
           product: {
-            ...product,
-            image: product.image.file.url
+            ...product
           }
         }
       });

@@ -40,18 +40,14 @@
             <ul class="cart__options options">
               <li class="options__item">
                 <label class="options__label">
-                  <input class="options__radio sr-only" type="radio" name="delivery" value="0" checked="">
-                  <span class="options__value">
-                    Самовывоз <b>бесплатно</b>
-                  </span>
+                  <input class="options__radio sr-only" type="radio" name="delivery" checked="" v-model="selectDelivery" value="0">
+                  <span class="options__value">Самовывоз <b>бесплатно</b></span>
                 </label>
               </li>
               <li class="options__item">
                 <label class="options__label">
-                  <input class="options__radio sr-only" type="radio" name="delivery" value="500">
-                  <span class="options__value">
-                    Курьером <b> {{this.price}} ₽</b>
-                  </span>
+                  <input class="options__radio sr-only" type="radio" name="delivery" v-model="selectDelivery" value="300">
+                  <span class="options__value">Курьером <b>300 ₽</b></span>
                 </label>
               </li>
             </ul>
@@ -84,7 +80,7 @@
           </ul>
           
           <div class="cart__total">
-            <p>Доставка: <b>500 ₽</b></p>
+            <p>Доставка: <b>{{ selectDelivery }} ₽</b></p>
             <p>Итого: <b>{{ $store.state.cartProducts.length }}</b> товара на сумму <b>{{ totalPrice | numberFormat}} ₽</b></p>
           </div>
 
@@ -117,8 +113,9 @@
     computed: {
       ...mapGetters({products: 'cartDetailProducts', totalPrice: 'cartTotalPrice'})
     },
-    data(){
+    data() {
       return {
+        selectDelivery: 0,
         formData: {},
         formError: {},
         formErrorMessage: ''
