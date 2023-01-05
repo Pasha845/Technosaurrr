@@ -71,7 +71,10 @@
         </h2>
         <div class="item__form">
           <form class="form" action="#" method="POST" @submit.prevent="addToCart">
-            <b class="item__price">
+            <b class="item__price" v-if="selectValue == 0">
+              {{ product.price * this.productAmount | numberFormat }} ₽
+            </b>
+            <b class="item__price" v-else>
               {{ selectValue.price * this.productAmount | numberFormat }} ₽
             </b>
             <fieldset class="form__block">
@@ -195,12 +198,6 @@
   import { mapActions } from 'vuex';
 
   export default {
-    prods() {
-      for (let index = 0; index < 2; ++index) {
-        let prop = this.productsData.offers.index
-        return prop
-      }
-    },
     data() {
       return {
         selectColor: '',
@@ -223,7 +220,7 @@
       category() {
         return this.productData.category;
       },
-      btnProduct(){
+      btnProduct() {
         return this.productAmount === 1 ? true : false;
       }
     },
@@ -233,7 +230,7 @@
       addToCart() {
         this.productAdded = false;
         this.productAddSending = true;
-        this.addProductToCart({productId: this.selectValue.id, amount: this.productAmount, color: this.selectColor})
+        this.addProductToCart({productId: this.selectValue.id, colorId: this.selectColor, amount: this.productAmount})
           .then(() => {
             this.productAdded = true;
             this.productAddSending = false;
@@ -256,7 +253,7 @@
     },
     watch: {
       '$route.params.id': {
-        handler(){
+        handler() {
           this.loadProduct();
         },
         immediate: true

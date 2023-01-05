@@ -98,7 +98,7 @@
 
   export default {
     components: {OrderItem},
-    created(){
+    created() {
       if(this.$store.state.orderInfo && this.$store.state.orderInfo.id === this.$route.params.id) {
         return;
       }
@@ -106,7 +106,7 @@
       this.$store.dispatch('loadOrderInfo', this.$route.params.id)
     },
     methods: {
-      order(){
+      order() {
         axios
           .post(API_BASE_URL + '/api/orders/{orderId}', {
             ...this.formData

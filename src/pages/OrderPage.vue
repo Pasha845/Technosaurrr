@@ -122,18 +122,15 @@
       }
     },
     methods: {
-      order(){
+      loadDelivery() {
+        axios.get(API_BASE_URL + '/api/deliveries')
+          .then(response => this.deliveryData = response.data);
+      },
+      order() {
         this.formError = {};
         this.formErrorMessage = '';
 
         axios
-          .get(API_BASE_URL + '/api/deliveries', {
-              params: {
-                id: this.id,
-                title: this.title,
-                price: this.price,
-              }
-            })
           .post(API_BASE_URL + '/api/orders', {
             ...this.formData
           }, {

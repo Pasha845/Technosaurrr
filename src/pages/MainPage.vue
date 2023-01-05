@@ -4,7 +4,8 @@
       <h1 class="content__title">
         Каталог
       </h1>
-      <span class="content__info" v-if="countProducts === 1">{{ countProducts }} товар</span>
+      <span class="content__info" v-if="countProducts == 0">товаров нет</span>
+      <span class="content__info" v-else-if="countProducts === 1">{{ countProducts }} товар</span>
       <span class="content__info" v-else-if="countProducts <= 4">{{ countProducts }} товара</span>
       <span class="content__info" v-else>{{ countProducts }} товаров</span>
     </div>

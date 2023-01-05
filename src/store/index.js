@@ -39,9 +39,9 @@ export default new Vuex.Store({
     syncCartProducts(state) {
       state.cartProducts = state.cartProductsData.map(item => {
         return {
-          productOfferId: 7,
+          productOfferId: item.product.id,
           amount: item.quantity,
-          colorId: 4
+          colorId: item.color.id
         }
       });
     }
@@ -90,13 +90,13 @@ export default new Vuex.Store({
           context.commit('syncCartProducts');
         })
     },
-    addProductToCart(context, {productId, amount, color}){
+    addProductToCart(context, {productId, amount, colorId}){
       return (new Promise(resolve => setTimeout(resolve, 2000)))
         .then(() => {
           return axios
             .post(API_BASE_URL + '/api/baskets/products' , {
               productOfferId: productId,
-              colorId: color,
+              colorId: colorId,
               quantity: amount
             }, {
               params: {
@@ -109,8 +109,8 @@ export default new Vuex.Store({
             })
         })
     },
-    updateCartProductAmount(context, {productId, amount, color}){
-      context.commit('updateCartProductAmount', {productId, amount, color});
+    updateCartProductAmount(context, {productId, amount, colorId}){
+      context.commit('updateCartProductAmount', {productId, amount, colorId});
 
       if(amount < 1) {
         return;
@@ -119,7 +119,7 @@ export default new Vuex.Store({
       return axios
         .put(API_BASE_URL + '/api/baskets/products' , {
           productOfferId: productId,
-          colorId: color,
+          colorId: colorId,
           quantity: amount
         }, {
           params: {
