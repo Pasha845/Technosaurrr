@@ -13,6 +13,7 @@
           <span class="form__value">До</span>
         </label>
       </fieldset>
+      
       <fieldset class="form__block">
         <legend class="form__legend">Категория</legend>
         <label class="form__label form__label--select">
@@ -22,6 +23,7 @@
           </select>
         </label>
       </fieldset>
+
       <fieldset class="form__block">
         <legend class="form__legend">Цвет</legend>
         <ul class="colors">

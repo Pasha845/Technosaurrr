@@ -38,16 +38,12 @@
           <div class="cart__options">
             <h3 class="cart__title">Доставка</h3>
             <ul class="cart__options options">
-              <li class="options__item">
+              <li class="options__item" v-for="delivery in deliveryData" :key="delivery.id">
                 <label class="options__label">
-                  <input class="options__radio sr-only" type="radio" name="delivery" checked="" v-model="selectDelivery" value="0">
-                  <span class="options__value">Самовывоз <b>бесплатно</b></span>
-                </label>
-              </li>
-              <li class="options__item">
-                <label class="options__label">
-                  <input class="options__radio sr-only" type="radio" name="delivery" v-model="selectDelivery" value="300">
-                  <span class="options__value">Курьером <b>300 ₽</b></span>
+                  <input class="options__radio sr-only" type="radio" name="delivery" v-model="currentDelivery" :value="delivery">
+                  <span class="options__value">
+                    {{ delivery.title }} <b>{{ delivery.price | numberFormat }} ₽</b>
+                  </span>
                 </label>
               </li>
             </ul>
@@ -80,8 +76,8 @@
           </ul>
           
           <div class="cart__total">
-            <p>Доставка: <b>{{ selectDelivery }} ₽</b></p>
-            <p>Итого: <b>{{ $store.state.cartProducts.length }}</b> товара на сумму <b>{{ totalPrice | numberFormat}} ₽</b></p>
+            <p>Доставка: <b>{{ currentDelivery.price | numberFormat }} ₽</b></p>
+            <p>Итого: <b>{{ $store.state.cartProducts.length }}</b> товара на сумму <b>{{ totalPrice + currentDelivery.price | numberFormat}} ₽</b></p>
           </div>
 
           <button class="cart__button button button--primery" type="submit">
@@ -115,17 +111,14 @@
     },
     data() {
       return {
-        selectDelivery: 0,
         formData: {},
         formError: {},
-        formErrorMessage: ''
+        formErrorMessage: '',
+        currentDelivery: 0,
+        deliveryData: null
       }
     },
     methods: {
-      loadDelivery() {
-        axios.get(API_BASE_URL + '/api/deliveries')
-          .then(response => this.deliveryData = response.data);
-      },
       order() {
         this.formError = {};
         this.formErrorMessage = '';
@@ -147,7 +140,14 @@
             this.formError = error.response.data.error.request || {};
             this.formErrorMessage = error.response.data.error.message;
           })
+      },
+      loadDelivery() {
+        axios.get(API_BASE_URL + '/api/deliveries')
+          .then(response => this.deliveryData = response.data);
       }
+    },
+    created() {
+      this.loadDelivery();
     },
     filters: {
       numberFormat
