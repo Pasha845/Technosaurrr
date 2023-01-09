@@ -41,7 +41,7 @@ export default new Vuex.Store({
         return {
           productOfferId: item.product.id,
           amount: item.quantity,
-          colorId: 1
+          colorId: item.color.id
         }
       });
     }
@@ -49,13 +49,11 @@ export default new Vuex.Store({
   getters: {
     cartDetailProducts(state) {
       return state.cartProducts.map(item => {
-        const product = state.cartProductsData.find(p => p.product.id === item.productId).product;
-
+        const product = state.cartProductsData.find(p => p.product === item.productId).product;
         return {
           ...item,
           product: {
-            ...product,
-            image: product.image.file.url
+            ...product
           }
         }
       });
@@ -92,13 +90,13 @@ export default new Vuex.Store({
           context.commit('syncCartProducts');
         })
     },
-    addProductToCart(context, {productId, amount, color}){
+    addProductToCart(context, {productId, amount, colorId}){
       return (new Promise(resolve => setTimeout(resolve, 2000)))
         .then(() => {
           return axios
             .post(API_BASE_URL + '/api/baskets/products' , {
               productOfferId: productId,
-              colorId: color,
+              colorId: colorId,
               quantity: amount
             }, {
               params: {
@@ -111,8 +109,8 @@ export default new Vuex.Store({
             })
         })
     },
-    updateCartProductAmount(context, {productId, amount, color}){
-      context.commit('updateCartProductAmount', {productId, amount, color});
+    updateCartProductAmount(context, {productId, amount, colorId}){
+      context.commit('updateCartProductAmount', {productId, amount, colorId});
 
       if(amount < 1) {
         return;
@@ -121,7 +119,7 @@ export default new Vuex.Store({
       return axios
         .put(API_BASE_URL + '/api/baskets/products' , {
           productOfferId: productId,
-          colorId: color,
+          colorId: colorId,
           quantity: amount
         }, {
           params: {

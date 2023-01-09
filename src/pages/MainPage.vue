@@ -4,14 +4,15 @@
       <h1 class="content__title">
         Каталог
       </h1>
-      <span class="content__info">
-        152 товара
-      </span>
+      <span class="content__info" v-if="countProducts == 0">товаров нет</span>
+      <span class="content__info" v-else-if="countProducts === 1">{{ countProducts }} товар</span>
+      <span class="content__info" v-else-if="countProducts <= 4">{{ countProducts }} товара</span>
+      <span class="content__info" v-else>{{ countProducts }} товаров</span>
     </div>
 
     <div class="content__catalog">
       
-      <ProductFilter :price-from.sync="filterPriceFrom" :price-to.sync="filterPriceTo" :category-id.sync="filterCategoryId" :color-check.sync="filterColorCheck"></ProductFilter>
+      <ProductFilter :price-from.sync="filterPriceFrom" :price-to.sync="filterPriceTo" :category-id.sync="filterCategoryId" :color-id.sync="filterColorId"></ProductFilter>
 
       <section class="catalog">
 
@@ -48,12 +49,12 @@
     components: { ProductList, BasePagination, ProductFilter },
     data() {
       return {
+        page: 1,
+        productsPerPage: 12,
         filterPriceFrom: null,
         filterPriceTo: null,
         filterCategoryId: 0,
-        filterColorCheck: "",
-        page: 1,
-        productsPerPage: 12,
+        filterColorId: 0,
         productsData: null,
         productsLoading: false,
         productsLoadingFailed: false
@@ -84,10 +85,10 @@
             params: {
               page: this.page,
               limit: this.productsPerPage,
-              categoryId: this.filterCategoryId,
               minPrice: this.filterPriceFrom,
               maxPrice: this.filterPriceTo,
-              colorId: this.filterColorCheck
+              categoryId: this.filterCategoryId,
+              colorId: this.filterColorId
             }
           })
           .then(response => this.productsData = response.data)
@@ -99,20 +100,20 @@
       page() {
         this.loadProducts();
       },
-      filterCategoryId(){
+      filterPriceFrom() {
         this.loadProducts();
       },
-      filterPriceFrom(){
+      filterPriceTo() {
         this.loadProducts();
       },
-      filterPriceTo(){
+      filterCategoryId() {
         this.loadProducts();
       },
-      filterColorCheck(){
+      filterColorId() {
         this.loadProducts();
       }
     },
-    created(){
+    created() {
       this.loadProducts();
     }
   };

@@ -5,14 +5,15 @@
       <fieldset class="form__block">
         <legend class="form__legend">Цена</legend>
         <label class="form__label form__label--price">
-          <input class="form__input" type="text" name="min-price" v-model.number="currentPriceFrom">
+          <input class="form__input" placeholder="0" type="text" name="min-price" v-model.number="currentPriceFrom">
           <span class="form__value">От</span>
         </label>
         <label class="form__label form__label--price">
-          <input class="form__input" type="text" name="max-price" v-model.number="currentPriceTo">
+          <input class="form__input" placeholder="0" type="text" name="max-price" v-model.number="currentPriceTo">
           <span class="form__value">До</span>
         </label>
       </fieldset>
+      
       <fieldset class="form__block">
         <legend class="form__legend">Категория</legend>
         <label class="form__label form__label--select">
@@ -22,28 +23,45 @@
           </select>
         </label>
       </fieldset>
+
       <fieldset class="form__block">
         <legend class="form__legend">Цвет</legend>
         <ul class="colors">
-          <li class="colors__item" v-for="(color, index) in categories.colors" v-bind:key="index">
-            {{ color.color.code }}
+          <li class="colors__item" v-bind:value="color.id" v-for="color in colors" :key="color.id">
             <label class="colors__label">
-              <input class="colors__radio sr-only" type="radio" name="color-item" v-model="currentColorCheck">
-              <span class="colors__value" :style="{ background: color.color.code }">
-              </span>
+              <input class="colors__radio sr-only" type="radio" name="color-item" v-model.number="currentColorId">
+              <span class="colors__value" :style="{ background: color.code }"></span>
             </label>
           </li>
         </ul>
       </fieldset>
 
       <fieldset class="form__block">
-        <legend class="form__legend">Объемб в ГБ</legend>
+        <legend class="form__legend">Объем, в ГБ</legend>
         <ul class="check-list">
           <li class="check-list__item">
             <label class="check-list__label">
-              <input class="check-list__check sr-only" type="checkbox" name="volume" value="8" checked="">
+              <input class="check-list__check sr-only" type="checkbox" name="volume" value="32">
               <span class="check-list__desc">
-                8 
+                32
+                <span>(313)</span>
+              </span>
+            </label>
+          </li>
+          <li class="check-list__item">
+            <label class="check-list__label">
+              <input class="check-list__check sr-only" type="checkbox" name="volume" value="64">
+              <span class="check-list__desc">
+                64
+                <span>(313)</span>
+              </span>
+            </label>
+          </li>
+          <li class="check-list__item">
+            <label class="check-list__label">
+              <input class="check-list__check sr-only" type="checkbox" name="volume" value="128">
+              <span class="check-list__desc">
+                128
                 <span>(313)</span>
               </span>
             </label>
@@ -71,14 +89,18 @@
         currentPriceFrom: null,
         currentPriceTo: null,
         currentCategoryId: 0,
-        currentColorCheck: '',
-        categoriesData: null
+        currentColorId: 0,
+        categoriesData: null,
+        colorsData: null
       }
     },
-    props: ['priceFrom', 'priceTo', 'categoryId', 'colorCheck'],
+    props: ['priceFrom', 'priceTo', 'categoryId', 'colorId'],
     computed: {
       categories() {
         return this.categoriesData ? this.categoriesData.items : [];
+      },
+      colors() {
+        return this.colorsData ? this.colorsData.items : [];
       }
     },
     watch: {
@@ -91,8 +113,8 @@
       categoryId(value) {
         this.currentCategoryId = value;
       },
-      colorCheck(value) {
-        this.currentColorCheck = value;
+      colorId(value) {
+        this.currentColorId = value;
       }
     },
     methods: {
@@ -100,21 +122,26 @@
         this.$emit('update:priceFrom', this.currentPriceFrom);
         this.$emit('update:priceTo', this.currentPriceTo);
         this.$emit('update:categoryId', this.currentCategoryId);
-        this.$emit('update:colorCheck', this.currentColorCheck);
+        this.$emit('update:colorId', this.currentColorId);
       },
       reset() {
         this.$emit('update:priceFrom', null);
         this.$emit('update:priceTo', null);
         this.$emit('update:categoryId', 0);
-        this.$emit('update:colorCheck', 0);
+        this.$emit('update:colorId', 0);
       },
       loadCategories() {
         axios.get(API_BASE_URL + '/api/productCategories')
           .then(response => this.categoriesData = response.data);
-      }
+      },
+      loadColors() {
+        axios.get(API_BASE_URL + '/api/colors')
+          .then(response => this.colorsData = response.data);
+      },
     },
     created() {
       this.loadCategories();
+      this.loadColors();
     }
   }
 </script>

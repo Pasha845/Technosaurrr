@@ -38,19 +38,11 @@
           <div class="cart__options">
             <h3 class="cart__title">Доставка</h3>
             <ul class="cart__options options">
-              <li class="options__item">
+              <li class="options__item" v-for="delivery in deliveryData" :key="delivery.id">
                 <label class="options__label">
-                  <input class="options__radio sr-only" type="radio" name="delivery" value="0" checked="">
+                  <input class="options__radio sr-only" type="radio" name="delivery" v-model="currentDelivery" :value="delivery">
                   <span class="options__value">
-                    Самовывоз <b>бесплатно</b>
-                  </span>
-                </label>
-              </li>
-              <li class="options__item">
-                <label class="options__label">
-                  <input class="options__radio sr-only" type="radio" name="delivery" value="500">
-                  <span class="options__value">
-                    Курьером <b> {{this.price}} ₽</b>
+                    {{ delivery.title }} <b>{{ delivery.price | numberFormat }} ₽</b>
                   </span>
                 </label>
               </li>
@@ -84,8 +76,8 @@
           </ul>
           
           <div class="cart__total">
-            <p>Доставка: <b>500 ₽</b></p>
-            <p>Итого: <b>{{ $store.state.cartProducts.length }}</b> товара на сумму <b>{{ totalPrice | numberFormat}} ₽</b></p>
+            <p>Доставка: <b>{{ currentDelivery.price | numberFormat }} ₽</b></p>
+            <p>Итого: <b>{{ $store.state.cartProducts.length }}</b> товара на сумму <b>{{ totalPrice + currentDelivery.price | numberFormat}} ₽</b></p>
           </div>
 
           <button class="cart__button button button--primery" type="submit">
@@ -117,26 +109,21 @@
     computed: {
       ...mapGetters({products: 'cartDetailProducts', totalPrice: 'cartTotalPrice'})
     },
-    data(){
+    data() {
       return {
         formData: {},
         formError: {},
-        formErrorMessage: ''
+        formErrorMessage: '',
+        currentDelivery: 0,
+        deliveryData: null
       }
     },
     methods: {
-      order(){
+      order() {
         this.formError = {};
         this.formErrorMessage = '';
 
         axios
-          .get(API_BASE_URL + '/api/deliveries', {
-              params: {
-                id: this.id,
-                title: this.title,
-                price: this.price,
-              }
-            })
           .post(API_BASE_URL + '/api/orders', {
             ...this.formData
           }, {
@@ -153,7 +140,14 @@
             this.formError = error.response.data.error.request || {};
             this.formErrorMessage = error.response.data.error.message;
           })
+      },
+      loadDelivery() {
+        axios.get(API_BASE_URL + '/api/deliveries')
+          .then(response => this.deliveryData = response.data);
       }
+    },
+    created() {
+      this.loadDelivery();
     },
     filters: {
       numberFormat

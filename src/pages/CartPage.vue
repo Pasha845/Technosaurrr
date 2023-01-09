@@ -17,9 +17,10 @@
       <h1 class="content__title">
         Корзина
       </h1>
-      <span class="content__info">
-        {{ $store.state.cartProducts.length }} товара
-      </span>
+      <span class="content__info" v-if="$store.state.cartProducts.length == 1">{{ $store.state.cartProducts.length }} товар</span>
+      <span class="content__info" v-else-if="$store.state.cartProducts.length <= 4">{{ $store.state.cartProducts.length }} товара</span>
+      <span class="content__info" v-else>{{ $store.state.cartProducts.length }} товаров</span>
+
       <div v-if="productsLoading">
         <div class="loading">
           <div class="loading__title">Загрузка товаров...</div>
