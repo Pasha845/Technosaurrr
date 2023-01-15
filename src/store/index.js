@@ -13,33 +13,33 @@ export default new Vuex.Store({
     orderInfo: null
   },
   mutations: {
-    updateOrderInfo(state, orderInfo){
+    updateOrderInfo(state, orderInfo) {
       state.orderInfo = orderInfo;
     },
     resetCart(state){
       state.cartProducts = [];
       state.cartProductsData = [];
     },
-    updateCartProductAmount(state, {productId, amount}){
+    updateCartProductAmount(state, {productId, amount}) {
       const item = state.cartProducts.find(item => item.productId === productId);
 
-      if(item){
+      if(item) {
         item.amount = amount;
       }
     },
     deleteCartProduct(state, productId) {
       state.cartProducts = state.cartProducts.filter(item => item.productId !== productId);
     },
-    updateUserAccessKey(state, accessKey){
+    updateUserAccessKey(state, accessKey) {
       state.userAccessKey = accessKey;
     },
-    updateCartProductsData(state, items){
+    updateCartProductsData(state, items) {
       state.cartProductsData = items;
     },
     syncCartProducts(state) {
       state.cartProducts = state.cartProductsData.map(item => {
         return {
-          productOfferId: item.product.id,
+          productOfferId: item.productOffer.id,
           amount: item.quantity,
           colorId: item.color.id
         }

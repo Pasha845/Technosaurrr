@@ -7,7 +7,7 @@
       {{ item.product.title }}
     </h3>
     <span class="product__code">
-      Артикул: {{ item.product.id }}
+      Артикул: {{ item.productOfferId }}
     </span>
 
     <div class="product__counter form__counter">
@@ -49,10 +49,12 @@
           return this.item.amount;
         },
         set(value) {
-          this.$store.dispatch('updateCartProductAmount', {productId: this.item.productId, amount: value});
+          this.$store.dispatch('updateCartProductAmount', {productOfferId: this.item.productOffer.id,
+          amount: value,
+          colorId: this.item.color.id});
         }
       },
-      btnProduct(){
+      btnProduct() {
         return this.amount === 1 ? true : false;
       }
     },
