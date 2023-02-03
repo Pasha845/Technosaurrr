@@ -10,6 +10,8 @@
       Артикул: {{ item.productOfferId }}
     </span>
 
+    {{ ju.items }}
+
     <div class="product__counter form__counter">
       <button type="button" aria-label="Убрать один товар" :disabled="btnProduct" @click="minusProduct">
         <svg width="10" height="10" fill="currentColor">
@@ -28,7 +30,7 @@
       {{ (item.amount * item.product.price) | numberFormat }} ₽
     </b>
 
-    <button class="product__del button-del" type="button" aria-label="Удалить товар из корзины" @click.prevent="deleteProduct(item.productId)">
+    <button class="product__del button-del" type="button" aria-label="Удалить товар из корзины" @click.prevent="deleteProduct(item.productOfferId )">
       <svg width="20" height="20" fill="currentColor">
         <use xlink:href="#icon-close"></use>
       </svg>
@@ -52,6 +54,7 @@
           this.$store.dispatch('updateCartProductAmount', {productOfferId: this.item.productOffer.id,
           amount: value,
           colorId: this.item.color.id});
+
         }
       },
       btnProduct() {

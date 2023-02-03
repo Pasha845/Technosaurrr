@@ -16,7 +16,7 @@ export default new Vuex.Store({
     updateOrderInfo(state, orderInfo) {
       state.orderInfo = orderInfo;
     },
-    resetCart(state){
+    resetCart(state) {
       state.cartProducts = [];
       state.cartProductsData = [];
     },
@@ -63,7 +63,7 @@ export default new Vuex.Store({
     }
   },
   actions: {
-    loadOrderInfo(context, orderId){
+    loadOrderInfo(context, orderId) {
       return axios
       .get(API_BASE_URL + '/api/orders' + orderId, {
         params: {
@@ -74,7 +74,7 @@ export default new Vuex.Store({
         context.commit('updateOrderInfo', response.data);
       });
     },
-    loadCart(context){
+    loadCart(context) {
       return axios
         .get(API_BASE_URL + '/api/baskets', {
           params: {
@@ -90,11 +90,11 @@ export default new Vuex.Store({
           context.commit('syncCartProducts');
         })
     },
-    addProductToCart(context, {productId, amount, colorId}){
+    addProductToCart(context, {productId, amount, colorId}) {
       return (new Promise(resolve => setTimeout(resolve, 2000)))
         .then(() => {
           return axios
-            .post(API_BASE_URL + '/api/baskets/products' , {
+            .post(API_BASE_URL + '/api/baskets/products', {
               productOfferId: productId,
               colorId: colorId,
               quantity: amount
@@ -109,7 +109,7 @@ export default new Vuex.Store({
             })
         })
     },
-    updateCartProductAmount(context, {productId, amount, colorId}){
+    updateCartProductAmount(context, {productId, amount, colorId}) {
       context.commit('updateCartProductAmount', {productId, amount, colorId});
 
       if(amount < 1) {
@@ -117,7 +117,7 @@ export default new Vuex.Store({
       }
 
       return axios
-        .put(API_BASE_URL + '/api/baskets/products' , {
+        .put(API_BASE_URL + '/api/baskets/products', {
           productOfferId: productId,
           colorId: colorId,
           quantity: amount
