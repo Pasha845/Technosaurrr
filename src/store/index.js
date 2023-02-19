@@ -39,7 +39,7 @@ export default new Vuex.Store({
     syncCartProducts(state) {
       state.cartProducts = state.cartProductsData.map(item => {
         return {
-          productOfferId: item.product.id,
+          productOfferId: item.product,
           amount: item.quantity,
           colorId: item.color.id
         }
