@@ -27,9 +27,9 @@
       <fieldset class="form__block">
         <legend class="form__legend">Цвет</legend>
         <ul class="colors">
-          <li class="colors__item" v-bind:value="color.id" v-for="color in colors" :key="color.id">
+          <li class="colors__item" v-for="color in colors" :key="color.id">
             <label class="colors__label">
-              <input class="colors__radio sr-only" type="radio" name="color-item" v-model.number="currentColorId">
+              <input class="colors__radio sr-only" type="radio" name="color" :value="color.id" v-model.number="currentColorId">
               <span class="colors__value" :style="{ background: color.code }"></span>
             </label>
           </li>

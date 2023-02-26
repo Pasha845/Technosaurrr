@@ -39,7 +39,13 @@
             <h3 class="cart__title">Доставка</h3>
             <ul class="cart__options options">
               <li class="options__item" v-for="delivery in deliveryData" :key="delivery.id">
-                <label class="options__label">
+                <label v-if="delivery.price == 0" class="options__label">
+                  <input class="options__radio sr-only" type="radio" name="delivery" v-model="currentDelivery" :value="delivery">
+                  <span class="options__value">
+                    {{ delivery.title }} <b>бесплатно</b>
+                  </span>
+                </label>
+                <label v-else class="options__label">
                   <input class="options__radio sr-only" type="radio" name="delivery" v-model="currentDelivery" :value="delivery">
                   <span class="options__value">
                     {{ delivery.title }} <b>{{ delivery.price | numberFormat }} ₽</b>
@@ -50,20 +56,10 @@
 
             <h3 class="cart__title">Оплата</h3>
             <ul class="cart__options options">
-              <li class="options__item">
+              <li class="options__item" v-for="response in responsesData" :key="response.id">
                 <label class="options__label">
-                  <input class="options__radio sr-only" type="radio" name="pay" value="card" checked="">
-                  <span class="options__value">
-                    Картой при получении
-                  </span>
-                </label>
-              </li>
-              <li class="options__item">
-                <label class="options__label">
-                  <input class="options__radio sr-only" type="radio" name="pay" value="cash">
-                  <span class="options__value">
-                    Наличными при получении
-                  </span>
+                  <input class="options__radio sr-only" type="radio" name="pay" :value="response.id" v-model="currentResponses">
+                  <span class="options__value">{{ response.title }}</span>
                 </label>
               </li>
             </ul>
@@ -72,12 +68,13 @@
 
         <div class="cart__block">
           <ul class="cart__orders">
-            <OrderItem v-for="item in products" :key="item.productId" :item="item"></OrderItem>
+            <OrderItem v-for="item in $store.state.cartProductsData" :key="item.productId" :item="item"></OrderItem>
           </ul>
           
           <div class="cart__total">
-            <p>Доставка: <b>{{ currentDelivery.price | numberFormat }} ₽</b></p>
-            <p>Итого: <b>{{ $store.state.cartProducts.length }}</b> товара на сумму <b>{{ totalPrice + currentDelivery.price | numberFormat}} ₽</b></p>
+            <p v-if="currentDelivery.price == 0">Доставка: <b>бесплатно</b></p>
+            <p v-else>Доставка: <b>{{ currentDelivery.price | numberFormat }} ₽</b></p>
+            <p>Итого: <b>{{ $store.state.cartProducts.length }}</b> товара на сумму <b>{{ (totalPrice + currentDelivery.price) | numberFormat }} ₽</b></p>
           </div>
 
           <button class="cart__button button button--primery" type="submit">
@@ -115,7 +112,9 @@
         formError: {},
         formErrorMessage: '',
         currentDelivery: 0,
-        deliveryData: null
+        currentResponses: 0,
+        deliveryData: null,
+        responsesData: null
       }
     },
     methods: {
@@ -128,6 +127,8 @@
             ...this.formData
           }, {
             params: {
+              deliveryId: this.currentDelivery.id,
+              responsesId: this.currentResponses.id,
               userAccessKey: this.$store.state.userAccessKey
             }
           })
@@ -144,10 +145,15 @@
       loadDelivery() {
         axios.get(API_BASE_URL + '/api/deliveries')
           .then(response => this.deliveryData = response.data);
+      },
+      loadResponses() {
+        axios.get(API_BASE_URL + '/api/payments?deliveryTypeId=1')
+          .then(response => this.responsesData = response.data);
       }
     },
     created() {
       this.loadDelivery();
+      this.loadResponses();
     },
     filters: {
       numberFormat

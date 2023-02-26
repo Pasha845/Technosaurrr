@@ -40,7 +40,7 @@
       <form class="cart__form form" action="#" method="POST">
         <div class="cart__field">
           <ul class="cart__list">
-            <CartItem v-for="item in products" :key="item.productId" :item="item"></CartItem>
+            <CartItem v-for="item in $store.state.cartProductsData" :key="item.productId" :item="item"></CartItem>
           </ul>
         </div>
 
@@ -82,7 +82,7 @@
       ...mapGetters({products: 'cartDetailProducts', totalPrice: 'cartTotalPrice'})
     },
     methods: {
-      loadProducts(){
+      loadProducts() {
         this.productsLoading = true;
         this.productsLoadingFailed = false;
         clearTimeout(this.loadProductsTimer);
@@ -103,6 +103,6 @@
             .then(() => this.productsLoading = false);
         }, 2000);
       }
-    },
+    }
   }
 </script>
