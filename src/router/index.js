@@ -13,8 +13,8 @@ const routes = [
   {name: 'main', component: MainPage, path: '/'},
   {name: 'product', component: ProductPage, path: '/product/:id'},
   {name: 'notFound', component: NotFoundPage, path: '*'},
-  {name: 'cart', component: CartPage, path: '*'},
-  {name: 'order', component: OrderPage, path: '/order/:id'},
+  {name: 'cart', component: CartPage, path: '/basket'},
+  {name: 'order', component: OrderPage, path: '/order'},
   {name: 'orderInfo', component: OrderInfoPage, path: '/order/info'}
 ];
 

@@ -7,13 +7,18 @@
       {{ item.productOffer.title }}
     </h3>
 
-    <p class="product__info product__info--color">
+    <div class="product__info product__info--color">
       Цвет:
       <span>
         <i :style="{ background: item.color.color.code }"></i>
         {{ item.color.color.title }}
       </span>
-    </p>
+
+      <p class="" v-for="elem in item.productOffer.propValues" :key="elem.id">
+        Другое:
+        <span>{{ elem.value }}</span>
+      </p>
+    </div>
 
     <span class="product__code">
       Артикул: {{ item.productOffer.id }}
@@ -25,7 +30,7 @@
           <use xlink:href="#icon-minus"></use>
         </svg>
       </button>
-      <input type="text" v-model.number="amount" name="count">
+      <input type="text" v-model.number="quantity" name="count">
       <button type="button" aria-label="Добавить один товар" @click="plusProduct">
         <svg width="10" height="10" fill="currentColor">
           <use xlink:href="#icon-plus"></use>
@@ -37,7 +42,7 @@
       {{ (item.quantity * item.productOffer.price ) | numberFormat}} ₽
     </b>
 
-    <button class="product__del button-del" type="button" aria-label="Удалить товар из корзины" @click.prevent="deleteProduct(item.productOfferId)">
+    <button class="product__del button-del" type="button" aria-label="Удалить товар из корзины" @click.prevent="deleteProduct(item.basketItemId)">
       <svg width="20" height="20" fill="currentColor">
         <use xlink:href="#icon-close"></use>
       </svg>
@@ -53,14 +58,12 @@
     filters: {numberFormat},
     props: ['item'],
     computed: {
-      amount: {
+      quantity: {
         get() {
           return this.item.quantity;
         },
         set(value) {
-          this.$store.dispatch('updateCartProductAmount', {productOfferId: this.item.productOffer.id,
-          quantity: value,
-          colorId: this.item.color.id});
+          this.$store.dispatch('updateCartProductAmount', {basketItemId: this.item.productOffer.id, quantity: value});
         }
       },
       btnProduct() {
