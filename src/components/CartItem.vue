@@ -15,7 +15,7 @@
       </span>
 
       <p class="" v-for="elem in item.productOffer.propValues" :key="elem.id">
-        Другое:
+        Объем:
         <span>{{ elem.value }}</span>
       </p>
     </div>
@@ -42,11 +42,13 @@
       {{ (item.quantity * item.productOffer.price ) | numberFormat}} ₽
     </b>
 
-    <button class="product__del button-del" type="button" aria-label="Удалить товар из корзины" @click.prevent="deleteProduct(item.basketItemId)">
+    <button class="product__del button-del" type="button" aria-label="Удалить товар из корзины" @click.prevent="deleteProduct(basketItemId)">
       <svg width="20" height="20" fill="currentColor">
         <use xlink:href="#icon-close"></use>
       </svg>
     </button>
+
+    {{ amount }}
   </li>
 </template>
 

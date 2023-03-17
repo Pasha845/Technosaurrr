@@ -58,7 +58,7 @@
             <ul class="cart__options options">
               <li class="options__item" v-for="response in responsesData" :key="response.id">
                 <label class="options__label">
-                  <input class="options__radio sr-only" type="radio" name="pay" :value="response.id" v-model="currentResponses">
+                  <input class="options__radio sr-only" type="radio" name="pay" :value="response" v-model="currentResponses">
                   <span class="options__value">{{ response.title }}</span>
                 </label>
               </li>
@@ -74,7 +74,7 @@
           <div class="cart__total">
             <p v-if="currentDelivery.price == 0">Доставка: <b>бесплатно</b></p>
             <p v-else>Доставка: <b>{{ currentDelivery.price | numberFormat }} ₽</b></p>
-            <p>Итого: <b>{{ $store.state.cartProducts.length }}</b> товара на сумму <b>{{ (totalPrice + currentDelivery.price) | numberFormat }} ₽</b></p>
+            <p>Итого: <b>{{ $store.state.cartProducts.length }}</b> товара на сумму <b>{{totalPrice | numberFormat }} ₽</b></p>
           </div>
 
           <button class="cart__button button button--primery" type="submit">
@@ -124,11 +124,11 @@
 
         axios
           .post(API_BASE_URL + '/api/orders', {
-            ...this.formData
+            ...this.formData,
+            deliveryTypeId: this.currentDelivery.id,
+            paymentTypeId: this.currentResponses.id
           }, {
             params: {
-              deliveryId: this.currentDelivery.id,
-              responsesId: this.currentResponses.id,
               userAccessKey: this.$store.state.userAccessKey
             }
           })

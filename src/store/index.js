@@ -27,8 +27,8 @@ export default new Vuex.Store({
         item.amount = amount;
       }
     },
-    deleteCartProduct(state, productId) {
-      state.cartProducts = state.cartProducts.filter(item => item.productId !== productId);
+    deleteCartProduct(state, basketItemId) {
+      state.cartProducts = state.cartProducts.filter(item => item.basketItemId !== basketItemId);
     },
     updateUserAccessKey(state, accessKey) {
       state.userAccessKey = accessKey;
@@ -41,7 +41,8 @@ export default new Vuex.Store({
         return {
           productOfferId: item.productOffer.id,
           amount: item.quantity,
-          colorId: item.color.id
+          colorId: item.color.id,
+          price: item.price
         }
       });
     }
@@ -59,15 +60,13 @@ export default new Vuex.Store({
       });
     },
     cartTotalPrice(state, getters) {
-      return getters.cartDetailProducts.reduce((acc, item) => (item.product.price * item.amount) + acc, 0);
+      return getters.cartDetailProducts.reduce((acc, item) => (item.price * item.amount) + acc, 0);
     }
   },
   actions: {
-    loadOrderInfo(context, orderId, deliveryId, responsesId) {
+    loadOrderInfo(context, orderId) {
       return axios
       .get(API_BASE_URL + '/api/orders' + orderId, {
-        deliveryTypeId: deliveryId,
-        paymentTypeId: responsesId,
         params: {
           userAccessKey: context.state.userAccessKey
         }
