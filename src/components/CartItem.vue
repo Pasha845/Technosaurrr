@@ -42,13 +42,11 @@
       {{ (item.quantity * item.productOffer.price ) | numberFormat}} ₽
     </b>
 
-    <button class="product__del button-del" type="button" aria-label="Удалить товар из корзины" @click.prevent="deleteProduct(basketItemId)">
+    <button class="product__del button-del" type="button" aria-label="Удалить товар из корзины" @click.prevent="deleteProduct(this.item.productOffer.id)">
       <svg width="20" height="20" fill="currentColor">
         <use xlink:href="#icon-close"></use>
       </svg>
     </button>
-
-    {{ amount }}
   </li>
 </template>
 
@@ -65,7 +63,7 @@
           return this.item.quantity;
         },
         set(value) {
-          this.$store.dispatch('updateCartProductAmount', {basketItemId: this.item.productOffer.id, quantity: value});
+          this.$store.dispatch('updateCartProductAmount', {productItemId: this.item.productOffer.id, amount: value});
         }
       },
       btnProduct() {

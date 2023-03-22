@@ -83,8 +83,7 @@
                 <li class="colors__item" v-for="color in product.colors" v-bind:key="color.id">
                   <label class="colors__label">
                     <input class="colors__radio sr-only" type="radio" v-model="selectColor" :value="color.color.id">
-                    <span class="colors__value" :style="{ background: color.color.code }">
-                    </span>
+                    <span class="colors__value" :style="{ background: color.color.code }"></span>
                   </label>
                 </li>
               </ul>
