@@ -28,7 +28,7 @@ export default new Vuex.Store({
       }
     },
     deleteCartProduct(state, basketItemId) {
-      state.cartProducts = state.cartProducts.filter(item => item.productOfferId !== basketItemId);
+      state.cartProducts = state.cartProducts.filter(item => item.basketItemId !== basketItemId);
     },
     updateUserAccessKey(state, accessKey) {
       state.userAccessKey = accessKey;

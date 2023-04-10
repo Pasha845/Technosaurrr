@@ -27,7 +27,9 @@
       <li class="sizes__item" v-for="value in product.offers" v-bind:key="value.id">
         <label class="sizes__label">
           <input class="sizes__radio sr-only" type="radio" v-model="selectValue" :value="value.price">
-          <span class="sizes__value" v-for="v in value.propValues" v-bind:key="v.id">{{ v.value }}</span>
+          <span class="sizes__value" v-for="v in value.propValues" v-bind:key="v.id">
+            {{ v.value }}
+          </span>
         </label>
       </li>
     </ul>

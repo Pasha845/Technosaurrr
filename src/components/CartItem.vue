@@ -37,12 +37,12 @@
         </svg>
       </button>
     </div>
-
+    
     <b class="product__price">
       {{ (item.quantity * item.productOffer.price ) | numberFormat}} ₽
     </b>
 
-    <button class="product__del button-del" type="button" aria-label="Удалить товар из корзины" @click.prevent="deleteProduct(this.item.productOffer.id)">
+    <button class="product__del button-del" type="button" aria-label="Удалить товар из корзины" @click.prevent="deleteProduct(item.id)">
       <svg width="20" height="20" fill="currentColor">
         <use xlink:href="#icon-close"></use>
       </svg>
@@ -63,7 +63,7 @@
           return this.item.quantity;
         },
         set(value) {
-          this.$store.dispatch('updateCartProductAmount', {productItemId: this.item.productOffer.id, amount: value});
+          this.$store.dispatch('updateCartProductAmount', {productItemId: this.item.id, amount: value});
         }
       },
       btnProduct() {
@@ -77,7 +77,7 @@
       },
       plusProduct(){
         this.quantity++;
-      },
+      }
     }
   }
 </script>
