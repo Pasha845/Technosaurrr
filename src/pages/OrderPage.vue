@@ -74,7 +74,10 @@
           <div class="cart__total">
             <p v-if="currentDelivery.price == 0">Доставка: <b>бесплатно</b></p>
             <p v-else>Доставка: <b>{{ currentDelivery.price | numberFormat }} ₽</b></p>
-            <p>Итого: <b>{{ $store.state.cartProducts.length }}</b> товара на сумму <b>{{totalPrice | numberFormat }} ₽</b></p>
+            <p v-if="$store.state.cartProducts.length == 0">Итого: <b>{{ $store.state.cartProducts.length }}</b> нет товаров</p>
+            <p v-else-if="$store.state.cartProducts.length == 1">Итого: <b>{{ $store.state.cartProducts.length }}</b> товар на сумму <b>{{totalPrice | numberFormat }} ₽</b></p>
+            <p v-else-if="$store.state.cartProducts.length <= 4">Итого: <b>{{ $store.state.cartProducts.length }}</b> товара на сумму <b>{{totalPrice | numberFormat }} ₽</b></p>
+            <p v-else>Итого: <b>{{ $store.state.cartProducts.length }}</b> товаров на сумму <b>{{totalPrice | numberFormat }} ₽</b></p>
           </div>
 
           <button class="cart__button button button--primery" type="submit">

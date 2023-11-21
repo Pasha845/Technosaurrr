@@ -34,7 +34,7 @@
         return this.pageNumber === 1 ? true : false;
       },
       nextBtn() {
-        return this.pageNumber === 4 ? true : false;
+        return this.pageNumber === Math.ceil(this.count / this.perPage) ? true : false;
       },
       pageNumber: {
         get() {

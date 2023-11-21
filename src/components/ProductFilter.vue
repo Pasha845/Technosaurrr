@@ -17,7 +17,7 @@
       <fieldset class="form__block">
         <legend class="form__legend">Категория</legend>
         <label class="form__label form__label--select">
-          <select class="form__select" type="text" name="category" v-model.number="currentCategoryId">
+          <select class="form__select" type="text" name="category" v-model="currentCategoryId">
             <option value="0">Все категории</option>
             <option v-bind:value="category.id" v-for="category in categories" :key="category.id">{{ category.title }}</option>
           </select>
@@ -44,7 +44,7 @@
               <input class="check-list__check sr-only" type="checkbox" name="volume" value="32">
               <span class="check-list__desc">
                 32
-                <span>(313)</span>
+                <span>()</span>
               </span>
             </label>
           </li>
@@ -53,7 +53,7 @@
               <input class="check-list__check sr-only" type="checkbox" name="volume" value="64">
               <span class="check-list__desc">
                 64
-                <span>(313)</span>
+                <span>()</span>
               </span>
             </label>
           </li>
@@ -62,7 +62,7 @@
               <input class="check-list__check sr-only" type="checkbox" name="volume" value="128">
               <span class="check-list__desc">
                 128
-                <span>(313)</span>
+                <span>()</span>
               </span>
             </label>
           </li>
@@ -86,10 +86,10 @@
   export default {
     data() {
       return {
-        currentPriceFrom: null,
-        currentPriceTo: null,
+        currentPriceFrom: 0,
+        currentPriceTo: 0,
         currentCategoryId: 0,
-        currentColorId: 0,
+        currentColorId: 1,
         categoriesData: null,
         colorsData: null
       }
@@ -128,7 +128,7 @@
         this.$emit('update:priceFrom', null);
         this.$emit('update:priceTo', null);
         this.$emit('update:categoryId', 0);
-        this.$emit('update:colorId', 0);
+        this.$emit('update:colorId', 1);
       },
       loadCategories() {
         axios.get(API_BASE_URL + '/api/productCategories')

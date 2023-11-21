@@ -4,7 +4,7 @@
       <h1 class="content__title">
         Каталог
       </h1>
-      <span class="content__info" v-if="countProducts == 0">товаров нет</span>
+      <span class="content__info" v-if="countProducts == 0">Нет товаров</span>
       <span class="content__info" v-else-if="countProducts == 1">{{ countProducts }} товар</span>
       <span class="content__info" v-else-if="countProducts <= 4">{{ countProducts }} товара</span>
       <span class="content__info" v-else>{{ countProducts }} товаров</span>
@@ -79,21 +79,20 @@
       loadProducts() {
         this.productsLoading = true;
         this.productsLoadingFailed = false;
-        clearTimeout(this.loadProductsTimer);
         axios
-          .get(API_BASE_URL + '/api/products', {
-            params: {
-              page: this.page,
-              limit: this.productsPerPage,
-              minPrice: this.filterPriceFrom,
-              maxPrice: this.filterPriceTo,
-              categoryId: this.filterCategoryId,
-              colorId: this.filterColorId
-            }
-          })
-          .then(response => this.productsData = response.data)
-          .catch(() => this.productsLoadingFailed = true)
-          .then(() => this.productsLoading = false);
+        .get(API_BASE_URL + '/api/products', {
+          params: {
+            page: this.page,
+            limit: this.productsPerPage,
+            minPrice: this.filterPriceFrom,
+            maxPrice: this.filterPriceTo,
+            categoryId: this.filterCategoryId,
+            colorId: this.filterColorId
+          }
+        })
+        .then(response => this.productsData = response.data)
+        .catch(() => this.productsLoadingFailed = true)
+        .then(() => this.productsLoading = false);
       }
     },
     watch: {
