@@ -1,7 +1,7 @@
 <template>
   <main class="content container" v-if="productLoading">
     <div class="loading">
-      <div class="loading__title">Загрузка товаров...</div>
+      <div class="loading__title">Загрузка товара...</div>
       <span></span>
       <span></span>
       <span></span>
@@ -83,8 +83,7 @@
                 <li class="colors__item" v-for="color in product.colors" v-bind:key="color.id">
                   <label class="colors__label">
                     <input class="colors__radio sr-only" type="radio" v-model="selectColor" :value="color.color.id">
-                    <span class="colors__value" :style="{ background: color.color.code }">
-                    </span>
+                    <span class="colors__value" :style="{ background: color.color.code }"></span>
                   </label>
                 </li>
               </ul>
@@ -96,7 +95,7 @@
                 <li class="sizes__item" v-for="value in product.offers" v-bind:key="value.id">
                   <label class="sizes__label">
                     <input class="sizes__radio sr-only" type="radio" v-model="selectValue" :value="value">
-                    <span class="sizes__value" v-for="v in value.propValues" v-bind:key="v.id">{{ v.value }}</span>
+                    <span class="sizes__value" v-for="prop in value.propValues" v-bind:key="prop.id">{{ prop.value }}</span>
                   </label>
                 </li>
               </ul>
@@ -110,7 +109,7 @@
                   </svg>
                 </button>
 
-                <input type="text" v-model.number="productAmount">
+                <input type="text" v-model.number="productAmount" @click="onInput">
 
                 <button type="button" aria-label="Добавить один товар" @click="plusProduct">
                   <svg width="12" height="12" fill="currentColor">
@@ -120,18 +119,18 @@
               </div>
 
               <button class="button button--primery" type="submit" :disabled="productAddSending">
-                В корзину
+                <div v-show="productBasket">В корзину</div>
+                <div class="loading" v-show="productAddSending">
+                  <span></span>
+                  <span></span>
+                  <span></span>
+                  <span></span>
+                  <span></span>
+                  <span></span>
+                  <span></span>
+                </div>
+                <div v-show="productAdded">В корзине</div>
               </button>
-            </div>
-            <div v-show="productAdded">Товар добавлен в корзину</div>
-            <div v-show="productAddSending" class="loading">Добаляем товар в корзину...
-              <span></span>
-              <span></span>
-              <span></span>
-              <span></span>
-              <span></span>
-              <span></span>
-              <span></span>
             </div>
           </form>
         </div>
@@ -200,12 +199,13 @@
   export default {
     data() {
       return {
-        selectColor: '',
+        selectColor: 0,
         selectValue: '',
         productAmount: 1,
         productData: null,
         productLoading: false,
         productLoadingFailed: false,
+        productBasket: true,
         productAdded: false,
         productAddSending: false
       };
@@ -221,13 +221,14 @@
         return this.productData.category;
       },
       btnProduct() {
-        return this.productAmount === 1 ? true : false;
+        return this.productAmount <= 1 ? true : false;
       }
     },
     methods: {
       ...mapActions(['addProductToCart']),
       gotoPage,
       addToCart() {
+        this.productBasket = false;
         this.productAdded = false;
         this.productAddSending = true;
         this.addProductToCart({productId: this.selectValue.id, colorId: this.selectColor, amount: this.productAmount})
@@ -239,6 +240,11 @@
       minusProduct(){
         this.productAmount--;
       },
+      onInput(productAmount) {
+        if(productAmount < 1) {
+          this.productAmount == 1;
+        }
+      },
       plusProduct(){
         this.productAmount++;
       },
@@ -246,9 +252,9 @@
         this.productLoading = true;
         this.productLoadingFailed = false;
         axios.get(API_BASE_URL + '/api/products/' + this.$route.params.id)
-          .then(response => this.productData = response.data)
-          .catch(() => this.productLoadingFailed = true)
-          .then(() => this.productLoading = false);
+        .then(response => this.productData = response.data)
+        .catch(() => this.productLoadingFailed = true)
+        .then(() => this.productLoading = false);
       }
     },
     watch: {
