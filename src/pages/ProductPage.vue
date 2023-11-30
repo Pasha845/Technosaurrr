@@ -199,7 +199,7 @@
   export default {
     data() {
       return {
-        selectColor: this.productData,
+        selectColor: 0,
         selectValue: '',
         productAmount: 1,
         productData: null,
@@ -256,10 +256,6 @@
         .catch(() => this.productLoadingFailed = true)
         .then(() => this.productLoading = false);
       }
-    },
-    mounted() {
-      const firstProduct = this.productData;
-      console.log(`Selected product: ${firstProduct}`)
     },
     watch: {
       '$route.params.id': {

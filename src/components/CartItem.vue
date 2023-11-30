@@ -14,7 +14,7 @@
         {{ item.color.color.title }}
       </span>
 
-      <p class="" v-for="elem in item.productOffer.propValues" :key="elem.id">
+      <p v-for="elem in item.productOffer.propValues" :key="elem.id">
         Объем:
         <span>{{ elem.value }}</span>
       </p>
@@ -52,10 +52,8 @@
 
 <script>
   import numberFormat from "@/helpers/numberFormat";
-  import { mapActions } from 'vuex';
 
   export default {
-    ...mapActions(['deleteCartProduct']),
     filters: {numberFormat},
     props: ['item'],
     computed: {

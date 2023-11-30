@@ -84,10 +84,10 @@
           params: {
             page: this.page,
             limit: this.productsPerPage,
-            minPrice: this.filterPriceFrom,
-            maxPrice: this.filterPriceTo,
-            categoryId: this.filterCategoryId,
-            colorId: this.filterColorId
+            'props[]': this.props,
+            minPrice: this.filterPriceFrom ? this.filterPriceFrom : null,
+            maxPrice: this.filterPriceTo ? this.filterPriceTo : null,
+            categoryId: this.filterCategoryId
           }
         })
         .then(response => this.productsData = response.data)

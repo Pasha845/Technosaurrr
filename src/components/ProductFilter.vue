@@ -29,7 +29,7 @@
         <ul class="colors">
           <li class="colors__item" v-for="color in colors" :key="color.id">
             <label class="colors__label">
-              <input class="colors__radio sr-only" type="radio" name="color" :value="color.id" v-model.number="currentColorId">
+              <input class="colors__radio sr-only" type="radio" v-model="currentColorId" :value="color.id">
               <span class="colors__value" :style="{ background: color.code }"></span>
             </label>
           </li>
@@ -37,31 +37,12 @@
       </fieldset>
 
       <fieldset class="form__block">
-        <legend class="form__legend">Объем, в ГБ</legend>
+        <legend class="form__legend"></legend>
         <ul class="check-list">
           <li class="check-list__item">
             <label class="check-list__label">
               <input class="check-list__check sr-only" type="checkbox" name="volume" value="32">
               <span class="check-list__desc">
-                32
-                <span>()</span>
-              </span>
-            </label>
-          </li>
-          <li class="check-list__item">
-            <label class="check-list__label">
-              <input class="check-list__check sr-only" type="checkbox" name="volume" value="64">
-              <span class="check-list__desc">
-                64
-                <span>()</span>
-              </span>
-            </label>
-          </li>
-          <li class="check-list__item">
-            <label class="check-list__label">
-              <input class="check-list__check sr-only" type="checkbox" name="volume" value="128">
-              <span class="check-list__desc">
-                128
                 <span>()</span>
               </span>
             </label>
@@ -90,17 +71,22 @@
         currentPriceTo: 0,
         currentCategoryId: 0,
         currentColorId: 1,
+        currentParamsId: 0,
         categoriesData: null,
-        colorsData: null
+        colorsData: null,
+        paramsData: null
       }
     },
-    props: ['priceFrom', 'priceTo', 'categoryId', 'colorId'],
+    props: ['priceFrom', 'priceTo', 'categoryId', 'colorId', 'paramsId'],
     computed: {
       categories() {
         return this.categoriesData ? this.categoriesData.items : [];
       },
       colors() {
         return this.colorsData ? this.colorsData.items : [];
+      },
+      params() {
+        return this.paramsData ? this.paramsData.items : [];
       }
     },
     watch: {
@@ -115,6 +101,9 @@
       },
       colorId(value) {
         this.currentColorId = value;
+      },
+      paramsId(value) {
+        this.currentParamsId = value;
       }
     },
     methods: {
@@ -123,12 +112,14 @@
         this.$emit('update:priceTo', this.currentPriceTo);
         this.$emit('update:categoryId', this.currentCategoryId);
         this.$emit('update:colorId', this.currentColorId);
+        this.$emit('update:paramsId', this.currentParamsId);
       },
       reset() {
         this.$emit('update:priceFrom', null);
         this.$emit('update:priceTo', null);
         this.$emit('update:categoryId', 0);
         this.$emit('update:colorId', 1);
+        this.$emit('update:paramsId', 0);
       },
       loadCategories() {
         axios.get(API_BASE_URL + '/api/productCategories')
@@ -138,10 +129,15 @@
         axios.get(API_BASE_URL + '/api/colors')
           .then(response => this.colorsData = response.data);
       },
+      loadParams() {
+        axios.get(API_BASE_URL + '/api/productCategories/skutery-i-skeyty')
+          .then(response => this.paramsData = response.data);
+      },
     },
     created() {
       this.loadCategories();
       this.loadColors();
+      this.loadParams();
     }
   }
 </script>
